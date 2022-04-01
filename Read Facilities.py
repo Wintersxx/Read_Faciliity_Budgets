@@ -17,9 +17,7 @@ start_date = str(input("Start date for this budget period \"YYYY-MM-DD\": "))
 budgets_sent = int(input("How many budgets were sent out?: "))
 print("*"* 60)
 
-#path = fr"P:\PACS\Finance\Budgets\{folder}\Received from Admins\*"
-path = fr"C:\Users\kyle.anderson\Documents\New folder\*.xlsx"
-
+path = fr"P:\PACS\Finance\Budgets\{folder}\Received\Final Q1\*"
 
 
 final_wb = xw.Book()
@@ -51,39 +49,38 @@ for file in glob(path):
 final_wb.sheets[0].range(f"p1").value = 'Budget Start Date'
 final_wb.sheets[0].range(f"a1").value = 'Facility'
 final_wb.sheets[0].range(f"B1").value = 'NOI'
-#final_wb.save(fr"P:\PACS\Finance\Budgets\{folder}\budgets checked.xlsx")
-final_wb.save(r"C:\Users\kyle.anderson\Pycharm\Fin\budgets checked.xlsx")
+
+final_wb.save(fr"P:\PACS\Finance\Budgets\{folder}\budgets checked.xlsx")
+
 
 # Checker to indicate early on if anything is amiss
 
 if x-2 != budgets_sent:
     if x-2 < budgets_sent:
-        print()
         print("Heads up, missing budgets from Admins")
     elif x-2 > budgets_sent:
-        print()
         print("Something is off on the sent/receive count")
 else:
-    print()
     print("All budgets are accounted for.", x-2,"budgets received")
 print("*" * 60)
 
 
 
 """PANDAS SECTION"""
-#facility_path = r"P:\PACS\Finance\Budgets\---Budget Tools and Automation Folder---\FacilityList w ID.xlsx"
-facility_path = r"C:\Users\kyle.anderson\OneDrive - FIT Solutions-Providence\FacilityList w ID.xlsx"
+facility_path = r"P:\PACS\Finance\Budgets\---Budget Tools and Automation Folder---\FacilityList w ID.xlsx"
+
 df = pd.read_excel(facility_path)
 df = df['Facility']
-#budgets_checked = fr"P:\PACS\Finance\Budgets\{folder}\budgets checked.xlsx"
-budgets_checked = r"C:\Users\kyle.anderson\Pycharm\Fin\budgets checked.xlsx"
+
+budgets_checked = fr"P:\PACS\Finance\Budgets\{folder}\budgets checked.xlsx"
+
 df1 = pd.read_excel(budgets_checked)
 df1 = df1['Facility']
 difference = list(set(df) - set(df1))
 difference.sort()
 expt = pd.DataFrame(difference)
-#expt.to_csv(fr"P:\PACS\Finance\Budgets\{folder}\budgets_missing_output.csv")
-expt.to_csv(r"C:\Users\kyle.anderson\Pycharm\Fin\budgets_check_output.csv")
+expt.to_csv(fr"P:\PACS\Finance\Budgets\{folder}\budgets_missing_output.csv")
+
 
 """PANDAS SECTION CONTINUED"""
 dfb = pd.read_excel(budgets_checked)
@@ -95,28 +92,11 @@ x = 0
 for rows in dfb['Budget Start Date']:
     if rows != start_date:
         print("ERROR:", dff[x])
-        with open('budget_receiver_errors.txt', 'a') as f:
-            f.write(f"{Facility_name} has a bad budget start date \n")
+        with open(fr"P:\PACS\Finance\Budgets\{folder}\budget_receiver_errors.txt", 'a') as f:
+            f.write(dff[x] + " has a budget date error\n")
     x += 1
 print("*" * 60)
 
 print()
-
-print()
 print(time.process_time(),"minutes")
 print(time.perf_counter(),"minutes")
-
-
-
-
-
-
-
-# expt.to_csv (r'C:\Users\kyle.anderson\Pycharm\Fin\Budget checks\budgets_check_output.csv')
-# import csv
-# difference
-# with open(r'C:\Users\kyle.anderson\Pycharm\Fin\Budget checks\budgets_checker.csv','w') as f:
-#     writer = csv.writer(f)
-#     writer.writerow(['Facility'])
-#     writer.writerows(difference)
-
